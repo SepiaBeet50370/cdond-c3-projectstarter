@@ -28,7 +28,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('customTag')
     .setBasePath(apiVersionPrefix)
-    .addBearerAuth() // fixed compile error here
+    .addBearerAuth()x // fixed compile error here
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`api/${apiVersionPrefix}`, app, document);
