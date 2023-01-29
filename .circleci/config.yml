@@ -157,7 +157,7 @@ jobs:
             aws ec2 describe-instances
               --filters "Name=tag-value,Values=backInfra" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> ansible/inventory.txt
+              --output text >> inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
