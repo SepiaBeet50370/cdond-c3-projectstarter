@@ -154,21 +154,21 @@ jobs:
       - checkout
       - install_awscli
       - run:
-          name: Ensure back-end infrastructure exists
-          command: |
-            aws cloudformation deploy \
-              --template-file .circleci/files/backend.yml \
-              --tags project3=backInfra \
-              --stack-name backend-${CIRCLE_WORKFLOW_ID:0:5} \
-              --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"
-      - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project3=frontInfra \
               --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:5} \
+              --region ${AWS_DEFAULT_REGION} \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --tags project3=backInfra \
+              --stack-name backend-${CIRCLE_WORKFLOW_ID:0:5} \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"
       - run:
@@ -184,6 +184,26 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      - destroy-environment
+
+  configure-infrastructure:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - install_awscli
+      - install_ansible
+      - add_ssh_keys:
+          fingerprints: ["b2:15:6b:2c:26:83:e5:1d:14:86:3d:77:c7:62:d5:ba"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run Configure-Server Ansible play
+          command: |
+            cd .circleci/ansible
+            cat inventory.txt
+
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
 
 
@@ -209,3 +229,5 @@ workflows:
           # filters:
           #   branches:
           #     only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
