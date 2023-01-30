@@ -181,6 +181,7 @@ jobs:
           command: |
             cd frontend
             npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
               
 
@@ -380,10 +381,10 @@ workflows:
               - "build-backend"
       - scan-frontend:
             requires:
-              - "build-frontend"
+              - "test-frontend"
       - scan-backend:
             requires:
-              - "build-backend"
+              - "test-backend"
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
