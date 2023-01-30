@@ -347,8 +347,8 @@ jobs:
           command: |
             cd backend
             npm install
-            apt install tar
-            apt install gzip
+            sudo apt install tar
+            sudo apt install gzip
       - run:
           name: Package Backend
           command: |
