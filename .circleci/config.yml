@@ -242,7 +242,7 @@ jobs:
       - destroy-environment
 
   run-migrations:
-  #configure RDS security group.
+  #configure RDS security group..
     docker:
       - image: cimg/python:3.10
     steps:
