@@ -354,6 +354,7 @@ jobs:
           command: |
             cd backend
             npm run build
+            cd ..
             tar -C backend -czvf artifact.tar.gz .
             # tar -czf artifact.tar.gz dist/* package*
             # cd ..
